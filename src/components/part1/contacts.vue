@@ -2,14 +2,15 @@
   <div class="contacts">
     <div class="contacts-header">
       <ui-filter
-        placeholder="Find a contact..."
-        :options.sync="people"
+        :options="people"
         :fuse="{ keys: ['name'] }"
+        placeholder="Find a contact..."
+        @filter="handleFilter"
       />
     </div>
     <div class="contacts-list">
       <contact-item
-        v-for="(person, personIdx) in people"
+        v-for="(person, personIdx) in results"
         :key="'item_' + personIdx"
         :details="person"
       />
@@ -26,29 +27,37 @@ export default {
     ContactItem,
   },
   data: function () {
+    let people: [
+      { name: 'Alexander Berry' },
+      { name: 'Jeanette Welch' },
+      { name: 'Marvin White' },
+      { name: 'Larry Baldwin' },
+      { name: 'Jonathan Pratt' },
+      { name: 'Ann Santos' },
+      { name: 'Ralph Chandler' },
+      { name: 'Jordan Green' },
+      { name: 'Lillie Moody' },
+      { name: 'Lester Warren' },
+      { name: 'Brent Walker' },
+      { name: 'Elijah Nunez' },
+      { name: 'Walter Walker' },
+      { name: 'Tillie Mason' },
+      { name: 'Ruth Miles' },
+      { name: 'Jackson Stephens' },
+      { name: 'Adrian Price' },
+      { name: 'Samuel Sherman' },
+      { name: 'Warren Cummings' },
+      { name: 'Jessie Ingram' },
+    ]
+    
     return {
-      people: [
-        { name: 'Alexander Berry' },
-        { name: 'Jeanette Welch' },
-        { name: 'Marvin White' },
-        { name: 'Larry Baldwin' },
-        { name: 'Jonathan Pratt' },
-        { name: 'Ann Santos' },
-        { name: 'Ralph Chandler' },
-        { name: 'Jordan Green' },
-        { name: 'Lillie Moody' },
-        { name: 'Lester Warren' },
-        { name: 'Brent Walker' },
-        { name: 'Elijah Nunez' },
-        { name: 'Walter Walker' },
-        { name: 'Tillie Mason' },
-        { name: 'Ruth Miles' },
-        { name: 'Jackson Stephens' },
-        { name: 'Adrian Price' },
-        { name: 'Samuel Sherman' },
-        { name: 'Warren Cummings' },
-        { name: 'Jessie Ingram' },
-      ]
+      people,
+      results: people,
+    }
+  },
+  methods: {
+    handleFilter: function (results) {
+      this.results = results
     }
   }
 }
