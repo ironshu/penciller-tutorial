@@ -8,10 +8,11 @@
     />
     <div class="contacts-header ui-cols">
       <ui-filter
-        placeholder="Find a contact..."
         class="--expanded"
-        :options.sync="people"
+        :options="people"
         :fuse="{ keys: ['name'] }"
+        placeholder="Find a contact..."
+        @filter="handleFilter"
       />
       <ui-field
         type="button"
@@ -22,7 +23,7 @@
     </div>
     <div class="contacts-list">
       <contact-item
-        v-for="(person, personIdx) in people"
+        v-for="(person, personIdx) in results"
         :key="'item_' + personIdx"
         :details="person"
         @click="handleItem(person, personIdx)"
@@ -42,34 +43,40 @@ export default {
     ContactDetails,
   },
   data: function () {
+    let people = [
+      { name: 'Alexander Berry', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '111-111-1234' }], notes: 'These are my notes' },
+      { name: 'Jeanette Welch', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '214-540-9469' }], notes: '' },
+      { name: 'Marvin White', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '439-985-2801' }], notes: '' },
+      { name: 'Larry Baldwin', birthday: '2022-02-10', phones: [{ location: 'home', number: '638-477-7047' }], notes: '' },
+      { name: 'Jonathan Pratt', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '257-275-4433' }], notes: '' },
+      { name: 'Ann Santos', birthday: '', phones: [{ location: 'mobile', number: '238-913-1597' }], notes: '' },
+      { name: 'Ralph Chandler', birthday: '', phones: [{ location: 'mobile', number: '888-530-5746' }], notes: '' },
+      { name: 'Jordan Green', birthday: '', phones: [{ location: 'work', number: '642-427-9162' }], notes: '' },
+      { name: 'Lillie Moody', birthday: '', phones: [{ location: 'mobile', number: '767-228-1867' }], notes: '' },
+      { name: 'Lester Warren', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '504-238-6867' }], notes: '' },
+      { name: 'Brent Walker', birthday: '', phones: [{ location: 'mobile', number: '454-526-3487' }], notes: '' },
+      { name: 'Elijah Nunez', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '268-281-4462' }], notes: '' },
+      { name: 'Walter Walker', birthday: '', phones: [{ location: 'home', number: '363-289-7140' }], notes: '' },
+      { name: 'Tillie Mason', birthday: '2022-02-10', phones: [{ location: 'home', number: '261-986-9537' }], notes: '' },
+      { name: 'Ruth Miles', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '222-301-5710' }], notes: '' },
+      { name: 'Jackson Stephens', birthday: '', phones: [{ location: 'mobile', number: '907-815-6221' }], notes: '' },
+      { name: 'Adrian Price', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '878-458-2840' }], notes: '' },
+      { name: 'Samuel Sherman', birthday: '', phones: [{ location: 'mobile', number: '834-849-6022' }], notes: '' },
+      { name: 'Warren Cummings', birthday: '', phones: [{ location: 'mobile', number: '904-695-3230' }], notes: '' },
+      { name: 'Jessie Ingram', birthday: '', phones: [{ location: 'mobile', number: '672-969-6817' }], notes: '' },
+    ]
+    
     return {
+      people,
+      results: people,
       details: null,
       idx: null,
-      people: [
-        { name: 'Alexander Berry', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '111-111-1234' }], notes: 'These are my notes' },
-        { name: 'Jeanette Welch', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '214-540-9469' }], notes: '' },
-        { name: 'Marvin White', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '439-985-2801' }], notes: '' },
-        { name: 'Larry Baldwin', birthday: '2022-02-10', phones: [{ location: 'home', number: '638-477-7047' }], notes: '' },
-        { name: 'Jonathan Pratt', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '257-275-4433' }], notes: '' },
-        { name: 'Ann Santos', birthday: '', phones: [{ location: 'mobile', number: '238-913-1597' }], notes: '' },
-        { name: 'Ralph Chandler', birthday: '', phones: [{ location: 'mobile', number: '888-530-5746' }], notes: '' },
-        { name: 'Jordan Green', birthday: '', phones: [{ location: 'work', number: '642-427-9162' }], notes: '' },
-        { name: 'Lillie Moody', birthday: '', phones: [{ location: 'mobile', number: '767-228-1867' }], notes: '' },
-        { name: 'Lester Warren', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '504-238-6867' }], notes: '' },
-        { name: 'Brent Walker', birthday: '', phones: [{ location: 'mobile', number: '454-526-3487' }], notes: '' },
-        { name: 'Elijah Nunez', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '268-281-4462' }], notes: '' },
-        { name: 'Walter Walker', birthday: '', phones: [{ location: 'home', number: '363-289-7140' }], notes: '' },
-        { name: 'Tillie Mason', birthday: '2022-02-10', phones: [{ location: 'home', number: '261-986-9537' }], notes: '' },
-        { name: 'Ruth Miles', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '222-301-5710' }], notes: '' },
-        { name: 'Jackson Stephens', birthday: '', phones: [{ location: 'mobile', number: '907-815-6221' }], notes: '' },
-        { name: 'Adrian Price', birthday: '2022-02-10', phones: [{ location: 'mobile', number: '878-458-2840' }], notes: '' },
-        { name: 'Samuel Sherman', birthday: '', phones: [{ location: 'mobile', number: '834-849-6022' }], notes: '' },
-        { name: 'Warren Cummings', birthday: '', phones: [{ location: 'mobile', number: '904-695-3230' }], notes: '' },
-        { name: 'Jessie Ingram', birthday: '', phones: [{ location: 'mobile', number: '672-969-6817' }], notes: '' },
-      ]
     }
   },
   methods: {
+    handleFilter: function (results) {
+      this.results = results
+    },
     handleItem: function (details, idx) {
       this.details = details
       this.idx = idx
