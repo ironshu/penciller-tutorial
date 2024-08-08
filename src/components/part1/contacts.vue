@@ -27,7 +27,7 @@ export default {
     ContactItem,
   },
   data: function () {
-    let people: [
+    let people = [
       { name: 'Alexander Berry' },
       { name: 'Jeanette Welch' },
       { name: 'Marvin White' },
