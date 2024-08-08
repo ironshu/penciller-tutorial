@@ -10,14 +10,16 @@
         name="name"
         label="Name"
         autocomplete="off"
-        :value.sync="localDetails.name"
+        :value="localDetails.name"
+        @input="handleNameInput"
       />
       <ui-field
         type="date"
         name="birthday"
         label="Birthday"
         autocomplete="off"
-        :value.sync="localDetails.birthday"
+        :value="localDetails.birthday"
+        @input="handleBirthdayInput"
       />
       <ui-repeater
         :values="localDetails.phones"
@@ -55,7 +57,8 @@
         name="notes"
         label="Notes"
         maxlength="180"
-        :value.sync="localDetails.notes"
+        :value="localDetails.notes"
+        @input="handleNotesInput"
         :rules="[]"
       />
       <ui-submit
@@ -95,6 +98,15 @@ export default {
     }
   },
   methods: {
+    handleNameInput: function (newValue) {
+      this.localDetails.name = newValue
+    },
+    handleBirthdayInput: function (newValue) {
+      this.localDetails.birthday = newValue
+    },
+    handleNotesInput: function (newValue) {
+      this.localDetails.notes = newValue
+    },
     handlePhones: function (newValue) {
       this.localDetails.phones = newValue
     },
@@ -147,10 +159,27 @@ export default {
 .details-close {
   width: 7rem;
   height: 4rem;
-  background: url('~@/assets/images/icon-x.svg') center no-repeat;
-  background-size: 3rem;
+  position: relative;
   cursor: pointer;
   opacity: 0.5;
+}
+
+.details-close:before,
+.details-close:after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 0.3rem;
+  height: 1.6rem;
+  background-color: #000;
+  border-radius: 0.2rem;
+  top: calc(50% - 0.8rem);
+  left: calc(50% - 0.5rem);
+  transform: rotate(45deg);
+}
+
+.details-close:after {
+  transform: rotate(-45deg);
 }
 
 .ui-form {
